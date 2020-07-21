@@ -76,7 +76,7 @@ const LineGraph = ({casesType='cases', ...props}) => {
         .then((res) => res.json())
         .then((data) => {
           //   console.log(chartData);
-          let chartData = buildChartData(data, "cases");
+          let chartData = buildChartData(data, casesType);
           setData(chartData);
         });
     };
