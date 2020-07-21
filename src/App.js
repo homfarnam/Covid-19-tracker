@@ -5,35 +5,35 @@ import {
   MenuItem,
   Card,
   CardContent,
- 
 } from "@material-ui/core";
-import axios from "axios";
 import "./App.css";
 import InfoBoxes from "./components/infoBox/InfoBoxes";
 import Map from "./components/map/Map";
-import Table from './components/table/Table'
+import Table from "./components/table/Table";
 import { sortData, prettyProntStat } from "./util";
 import LineGraph from "./components/lineGraph/LineGraph";
-import 'leaflet/dist/leaflet.css'
+import "leaflet/dist/leaflet.css";
 
 function App() {
   const [countries, setCountries] = useState([]);
   const [country, setCountry] = useState("Worldwide");
   const [countryInfo, setCountryInfo] = useState({});
-  const [tableData,setTableData] = useState([])
-  const [mapCenter,setMapCenter] = useState({
-    lat: 34.80746 , lng: -40.4796
-  })
-  const [mapZoom,setMapZoom] = useState(3)
-  const [mapCountries,setMapCountries] = useState([])
+  const [tableData, setTableData] = useState([]);
+  const [mapCenter, setMapCenter] = useState({
+    lat: 34.80746,
+    lng: -40.4796,
+  });
+  const [mapZoom, setMapZoom] = useState(3);
+  const [mapCountries, setMapCountries] = useState([]);
+  const [casesType, setCasesType] = useState("cases");
 
-  useEffect(()=>{
-    fetch('https://disease.sh/v3/covid-19/all')
-      .then(res=> res.json())
-      .then(data=>{
-        setCountryInfo(data)
-      })
-  },[])
+  useEffect(() => {
+    fetch("https://disease.sh/v3/covid-19/all")
+      .then((res) => res.json())
+      .then((data) => {
+        setCountryInfo(data);
+      });
+  }, []);
 
   useEffect(() => {
     const getCountriesData = async () => {
@@ -44,17 +44,14 @@ function App() {
             name: country.country, // United States , United Knigdom , ...
             value: country.countryInfo.iso2, // US , UK , FR , ...
           }));
-          const sortedData = sortData(data)
-          setTableData(sortedData)
-          setMapCountries(data)
+          const sortedData = sortData(data);
+          setTableData(sortedData);
+          setMapCountries(data);
           setCountries(countries);
-          
         });
     };
     getCountriesData();
   }, []);
-
-
 
   const onCountryChange = async (event) => {
     const countryCode = event.target.value;
@@ -70,8 +67,8 @@ function App() {
       .then((data) => {
         setCountry(countryCode);
         setCountryInfo(data);
-        setMapCenter([data.countryInfo.lat,data.countryInfo.long])
-        setMapZoom(4) 
+        setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+        setMapZoom(4);
       });
   };
 
@@ -90,7 +87,7 @@ function App() {
               variant="outlined"
               value={country}
             >
-              <MenuItem value="worldwide">Worldwide</MenuItem>
+              <MenuItem value="Worldwide">Worldwide</MenuItem>
               {countries.map((country) => (
                 <MenuItem value={country.value}>{country.name}</MenuItem>
               ))}
@@ -100,34 +97,46 @@ function App() {
 
         <div className="app__stats">
           <InfoBoxes
+          isRed
+            active={casesType === "cases"}
+            onClick={(e) => setCasesType("cases")}
             title="Coronavirus cases"
             cases={prettyProntStat(countryInfo.todayCases)}
-            total={countryInfo.cases}
+            total={prettyProntStat(countryInfo.cases)}
           />
           <InfoBoxes
+            active={casesType === "recovered"}
+            onClick={(e) => setCasesType("recovered")}
             title="Recovered"
-            cases={countryInfo.todayRecovered}
-            total={countryInfo.recovered}
+            cases={prettyProntStat(countryInfo.todayRecovered)}
+            total={prettyProntStat(countryInfo.recovered)}
           />
           <InfoBoxes
+            isRed
+            active={casesType === "deaths"}
+            onClick={(e) => setCasesType("deaths")}
             title="Deaths"
-            cases={countryInfo.todayDeaths}
-            total={countryInfo.deaths}
+            cases={prettyProntStat(countryInfo.todayDeaths)}
+            total={prettyProntStat(countryInfo.deaths)}
           />
         </div>
 
-        <Map countries={mapCountries} center={mapCenter} zoom={mapZoom}/>
+        <Map
+          casesType={casesType}
+          countries={mapCountries}
+          center={mapCenter}
+          zoom={mapZoom}
+        />
       </div>
 
       <Card className="app__right">
         <CardContent>
           <h3>Live Cases by Country</h3>
-          <Table countries={tableData}/>
-          <h3>Wordwide new cases</h3>
-          <LineGraph />
+          <Table countries={tableData} />
+          <h3 className='app__graphTitle'>Wordwide new {casesType}</h3>
+          <LineGraph className='app__graph' casesType={casesType} />
         </CardContent>
-        {/* table */}
-        {/* Graph */}
+      
       </Card>
     </div>
   );

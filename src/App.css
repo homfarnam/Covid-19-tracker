@@ -12,6 +12,10 @@ body {
     padding: 20px;
 }
 
+.app__dropdown {
+    background-color: white;
+}
+
 .app__header {
     display: flex;
     align-items: center;
@@ -19,13 +23,38 @@ body {
     margin: 20px;
 }
 
+.app__header>h1 {
+    color: #fc3c3c;
+    font-size: 2rem;
+}
+
 .app__left {
     flex: 0.9;
+}
+
+.app__right {
+    display: flex;
+    flex-direction: column;
+}
+
+.app__right .muiCardContent-root {
+    flex-direction: column;
+    display: flex;
+    flex-grow: 1;
 }
 
 .app__stats {
     display: flex;
     justify-content: space-between;
+}
+
+.app__graph {
+    flex-grow: 1;
+}
+
+.app__graphTitle {
+    margin-top: 70px;
+    margin-bottom: 20px;
 }
 
 @media screen and (max-width:990px) {

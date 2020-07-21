@@ -17,18 +17,20 @@
         color: #555;
     }
     
-    .info-flag {
-        height: 100%;
+    .info-container {
+        width: 150px;
     }
     
     .info-flag img {
         width: 100px;
         border-radius: 5px;
-        background-size: cover;
     }
     
-    .info-container {
-        width: 150px;
+    .info-flag {
+        height: 80px;
+        background-size: cover;
+        width: 100%;
+        border-radius: 8x;
     }
     
     .info-confirmed,
