@@ -65,7 +65,7 @@ const buildChartData = (data, casesType = "cases") => {
   return chartData;
 };
 
-const LineGraph = () => {
+const LineGraph = ({casesType='cases'}) => {
   const [data, setData] = useState({});
 
   // https://disease.sh/v3/covid-19/historical/all?lastdays=120
@@ -81,11 +81,10 @@ const LineGraph = () => {
         });
     };
     fetchData();
-  }, []);
+  }, [casesType]);
 
   return (
     <div>
-      <h1>I'm a graph</h1>
       {data?.length > 0 && (
         <Line
           data={{
