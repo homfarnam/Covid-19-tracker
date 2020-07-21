@@ -12,7 +12,7 @@ import "./App.css";
 import InfoBoxes from "./components/infoBox/InfoBoxes";
 import Map from "./components/map/Map";
 import Table from './components/table/Table'
-import { sortData } from "./util";
+import { sortData, prettyProntStat } from "./util";
 import LineGraph from "./components/lineGraph/LineGraph";
 import 'leaflet/dist/leaflet.css'
 
@@ -25,6 +25,7 @@ function App() {
     lat: 34.80746 , lng: -40.4796
   })
   const [mapZoom,setMapZoom] = useState(3)
+  const [mapCountries,setMapCountries] = useState([])
 
   useEffect(()=>{
     fetch('https://disease.sh/v3/covid-19/all')
@@ -45,7 +46,9 @@ function App() {
           }));
           const sortedData = sortData(data)
           setTableData(sortedData)
+          setMapCountries(data)
           setCountries(countries);
+          
         });
     };
     getCountriesData();
@@ -67,11 +70,13 @@ function App() {
       .then((data) => {
         setCountry(countryCode);
         setCountryInfo(data);
+        setMapCenter([data.countryInfo.lat,data.countryInfo.long])
+        setMapZoom(4) 
       });
   };
 
-  // console.log("country info:", countryInfo);
-  // console.log(tableData);
+  console.log("country info:", countryInfo);
+  console.log(tableData);
 
   return (
     <div className="app">
@@ -96,7 +101,7 @@ function App() {
         <div className="app__stats">
           <InfoBoxes
             title="Coronavirus cases"
-            cases={countryInfo.todayCases}
+            cases={prettyProntStat(countryInfo.todayCases)}
             total={countryInfo.cases}
           />
           <InfoBoxes
@@ -111,7 +116,7 @@ function App() {
           />
         </div>
 
-        <Map  center={mapCenter} zoom={mapZoom}/>
+        <Map countries={mapCountries} center={mapCenter} zoom={mapZoom}/>
       </div>
 
       <Card className="app__right">
