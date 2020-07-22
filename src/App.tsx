@@ -18,7 +18,8 @@ const App =()=> {
 
   interface mapcenter {
     lat: number
-    lng:number
+    lng:number,
+
   }
 
   interface country{
