@@ -25,9 +25,16 @@ const App =()=> {
     country:string
   }
 
-  const [countries, setCountries] = useState([]);
-  const [country, setCountry] = useState<country>("Worldwide");
-  const [countryInfo, setCountryInfo] = useState({});
+  interface countries{
+    countries: object
+  }
+  interface countryinfo{
+    countryInfo: object
+  }
+
+  const [countries, setCountries] = useState<countries>([]);
+  const [country, setCountry] = useState <country> ("Worldwide");
+  const [countryInfo, setCountryInfo] = useState<countryinfo>({});
   const [tableData, setTableData] = useState([]);
   const [mapCenter, setMapCenter] = useState<mapcenter>({
     lat: 34.80746,
@@ -107,7 +114,7 @@ const App =()=> {
 
         <div className="app__stats">
           <InfoBoxes
-          isRed
+            isRed
             active={casesType === "cases"}
             onClick={(e) => setCasesType("cases")}
             title="Coronavirus cases"
@@ -115,6 +122,7 @@ const App =()=> {
             total={prettyProntStat(countryInfo.cases)}
           />
           <InfoBoxes
+            isGreen
             active={casesType === "recovered"}
             onClick={(e) => setCasesType("recovered")}
             title="Recovered"
