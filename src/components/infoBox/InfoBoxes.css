@@ -29,6 +29,10 @@
     border-color: red;
 }
 
+.infoBox--green {
+    border-color: green;
+}
+
 .infoBox__cases--green {
     color: lightgreen !important;
 }
