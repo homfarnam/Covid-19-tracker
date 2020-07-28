@@ -13,8 +13,9 @@ import Table from "./components/table/Table";
 import { sortData, prettyProntStat } from "./util";
 import LineGraph from "./components/lineGraph/LineGraph";
 import "leaflet/dist/leaflet.css";
+import Footer from "./components/footer/Footer";
 
-function App() {
+const App = () => {
   const [countries, setCountries] = useState([]);
   const [country, setCountry] = useState("Worldwide");
   const [countryInfo, setCountryInfo] = useState({});
@@ -72,8 +73,9 @@ function App() {
       });
   };
 
-  console.log("country info:", countryInfo);
-  console.log(tableData);
+  // console.log("country info:", countryInfo);
+  // console.log(tableData);
+  console.log(typeof countries);
 
   return (
     <div className="app">
@@ -97,7 +99,7 @@ function App() {
 
         <div className="app__stats">
           <InfoBoxes
-          isRed
+            isRed
             active={casesType === "cases"}
             onClick={(e) => setCasesType("cases")}
             title="Coronavirus cases"
@@ -133,13 +135,19 @@ function App() {
         <CardContent>
           <h3>Live Cases by Country</h3>
           <Table countries={tableData} />
-          <h3 className='app__graphTitle'>Wordwide new {casesType}</h3>
-          <LineGraph className='app__graph' casesType={casesType} />
+          <h3 className="app__graphTitle">Wordwide new {casesType}</h3>
+          <LineGraph className="app__graph" casesType={casesType} />
         </CardContent>
-      
       </Card>
+
+      <div className='footer__section'>
+    
+        <Footer />
+    
+      </div>
+     
     </div>
   );
-}
+};
 
 export default App;

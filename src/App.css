@@ -62,3 +62,14 @@ body {
         flex-direction: column;
     }
 }
+
+.footer__section {}
+
+
+/* .footer {
+    display: flex !important;
+    justify-content: center;
+    flex-direction: column;
+    position: absolute;
+    width: 100%;
+} */

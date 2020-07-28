@@ -2,7 +2,7 @@ import React from "react";
 import './Table.css'
 import numeral from 'numeral'
 
-function Table({ countries }) {
+const Table =({ countries }) =>{
   return (
     <div className="table">
       {countries.map(({country, cases}) => (
