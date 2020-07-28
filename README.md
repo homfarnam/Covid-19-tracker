@@ -10,6 +10,11 @@ I used [https://disease.sh](https://disease.sh) API for get these data.
 
 In the project directory, you can run:
 
+### `yarn`
+
+Install all of the dependencies for start the project.
+
+
 ### `yarn start`
 
 Runs the app in the development mode.<br />
