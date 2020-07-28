@@ -16,7 +16,7 @@ const options = {
     mode: "index",
     intersect: false,
     callbacks: {
-      label: function (tooltipItem, data) {
+      label: function (tooltipItem: { value: any; }, data: any) {
         return numeral(tooltipItem.value).format("+0,0");
       },
     },
@@ -38,7 +38,7 @@ const options = {
         },
         ticks: {
           // include a dollar sign in ticks
-          callback: function (value, index, values) {
+          callback: function (value: any, index: any, values: any) {
             return numeral(value).format("0a");
           },
         },
@@ -47,7 +47,7 @@ const options = {
   },
 };
 
-const buildChartData = (data, casesType = "cases") => {
+const buildChartData = (data: { [x: string]: { [x: string]: any; }; cases: any[] }, casesType = "cases") => {
   const chartData = [];
   let lastDataPoint;
 
@@ -65,8 +65,17 @@ const buildChartData = (data, casesType = "cases") => {
   return chartData;
 };
 
+type Data = {
+  data: any[]
+}
+
+type chartData = {
+  x: string,
+  y: number
+}
+
 const LineGraph = ({casesType='cases', ...props}) => {
-  const [data, setData] = useState({});
+  const [data, setData] = useState<Partial<Data>>({});
 
   // https://disease.sh/v3/covid-19/historical/all?lastdays=120
 

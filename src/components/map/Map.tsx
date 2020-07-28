@@ -5,7 +5,7 @@ import { showDataOnMap } from "../../util";
 
 type MapProps = {
     casesType:string,
-    center:undefined,
+    center:[number , number],
     zoom:number,
     countries:object
 };

@@ -16,21 +16,21 @@ import "leaflet/dist/leaflet.css";
 
 const App =()=> {
 
-  interface mapcenter {
+  type mapcenter = {
     lat: number
     lng:number,
 
   }
 
-  interface country{
+  type country ={
     country:string
   }
 
-  interface countries{
-    countries: object
+  type countries = {
+    countries: any[]
     map:Function
   }
-  interface countryinfo{
+  type countryinfo ={
     todayRecovered: number;
     recovered: number;
     deaths: number;
@@ -43,9 +43,9 @@ const App =()=> {
  
   
 
-  const [countries, setCountries] = useState<countries>([]);
-  const [country, setCountry] = useState <country> ("Worldwide");
-  const [countryInfo, setCountryInfo] = useState<countryinfo>({});
+  const [countries, setCountries] = useState<Partial<countries>>([]);
+  const [country, setCountry] = useState("Worldwide");
+  const [countryInfo, setCountryInfo] = useState<Partial<countryinfo>>({});
   const [tableData, setTableData] = useState([]);
   const [mapCenter, setMapCenter] = useState<mapcenter>({
     lat: 34.80746,
@@ -68,7 +68,7 @@ const App =()=> {
       await fetch("https://disease.sh/v3/covid-19/countries")
         .then((response) => response.json())
         .then((data) => {
-          const countries = data.map((country : {country:object}) => ({
+          const countries = data.map((country : {country:object , countryInfo:{iso2:object}}) => ({
             name: country.country, // United States , United Knigdom , ...
             value: country.countryInfo.iso2, // US , UK , FR , ...
           }));
@@ -95,7 +95,7 @@ const App =()=> {
       .then((data) => {
         setCountry(countryCode);
         setCountryInfo(data);
-        setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+        setMapCenter([data.countryInfo.lat, data.countryInfo.long])
         setMapZoom(4);
       });
   };
@@ -134,8 +134,9 @@ const App =()=> {
           />
           <InfoBoxes
             isGreen
+            
             active={casesType === "recovered"}
-            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => setCasesType("recovered")}
+            onClick={(e:Event) => setCasesType("recovered")}
             title="Recovered"
             cases={prettyProntStat(countryInfo.todayRecovered)}
             total={prettyProntStat(countryInfo.recovered)}
