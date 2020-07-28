@@ -49,7 +49,7 @@ type casesColors = {
 export const showDataOnMap = (data: any, casesType = "cases"): showDataOnMap =>
   data.map(
     (country: {
-      country: { countryInfo:{ lat: any; long: any; flag: string } };
+      country: { countryInfo:{ lat: number; long: number; flag: string } };
       cases: number;
       recovered: number;
       deaths: number;
