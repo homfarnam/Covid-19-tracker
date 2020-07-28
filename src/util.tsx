@@ -2,20 +2,7 @@ import React from "react";
 import { Circle, Popup } from "react-leaflet";
 import numeral from "numeral";
 
-const casesTypeColors = {
-  cases: {
-    hex: "#cc1034",
-    multiplier: 800,
-  },
-  recovered: {
-    hex: "#7dd71d",
-    multiplier: 1200,
-  },
-  deaths: {
-    hex: "#afb4443",
-    multiplier: 2000,
-  },
-};
+
 
 export const sortData = (data: any) => {
   const sortedData = [...data];
@@ -37,6 +24,20 @@ type casesColors = {
     hex: string;
     multiplier: number;
   };
+};
+const casesTypeColors: casesColors = {
+  cases: {
+    hex: "#cc1034",
+    multiplier: 800,
+  },
+  recovered: {
+    hex: "#7dd71d",
+    multiplier: 1200,
+  },
+  deaths: {
+    hex: "#afb4443",
+    multiplier: 2000,
+  },
 };
 
 // draw circles on the map with interactive tooltip
