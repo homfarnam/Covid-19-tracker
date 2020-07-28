@@ -31,50 +31,56 @@ type showDataOnMap = {
 };
 
 type casesColors = {
-  cases:{
-    hex:string,
-    multiplier:number
-  },
-  recovered:{
-    hex:string,
-    multiplier:number
-  },
+  cases: {
+    hex: string;
+    multiplier: number;
+  };
+  recovered: {
+    hex: string;
+    multiplier: number;
+  };
   deaths: {
-    hex:string,
-    multiplier:number
-  },
-    
-}
+    hex: string;
+    multiplier: number;
+  };
+};
 
 // draw circles on the map with interactive tooltip
 export const showDataOnMap = (data: any, casesType = "cases"): showDataOnMap =>
-  data.map((country: { countryInfo: { lat: any; long: any } }) => (
-    <Circle
-      center={[country.countryInfo.lat, country.countryInfo.long]}
-      fillOpacity={0.4}
-      color={casesTypeColors[casesType].hex}
-      fillColor={casesTypeColors[casesType].hex}
-      radius={
-        Math.sqrt(country[casesType]) * casesTypeColors[casesType].multiplier
-      }
-    >
-       <Popup>
-         <div className="info-container">
-           <div
-            className="info-flag"
-            style={{ backgroundImage: `url(${country.countryInfo.flag})` }}
-          />
-          <div className="info-name">{country.country}</div>
-          <div className="info-confirmed">
-            Cases: {numeral(country.cases).format("0,0")}
+  data.map(
+    (country: {
+      country: { countryInfo:{ lat: any; long: any; flag: string } };
+      cases: number;
+      recovered: number;
+      deaths: number;
+    }) => (
+      <Circle
+        center={[country.countryInfo.lat, country.countryInfo.long]}
+        fillOpacity={0.4}
+        color={casesTypeColors[casesType].hex}
+        fillColor={casesTypeColors[casesType].hex}
+        radius={
+          Math.sqrt(country[casesType]) * casesTypeColors[casesType].multiplier
+        }
+      >
+        <Popup>
+          <div className="info-container">
+            <div
+              className="info-flag"
+              style={{ backgroundImage: `url(${country.countryInfo.flag})` }}
+            />
+            <div className="info-name">{country.country}</div>
+            <div className="info-confirmed">
+              Cases: {numeral(country.cases).format("0,0")}
+            </div>
+            <div className="info-recovered">
+              Recovered: {numeral(country.recovered).format("0,0")}
+            </div>
+            <div className="info-deaths">
+              Deaths: {numeral(country.deaths).format("0,0")}
+            </div>
           </div>
-          <div className="info-recovered">
-            Recovered: {numeral(country.recovered).format("0,0")}
-          </div>
-          <div className="info-deaths">
-            Deaths: {numeral(country.deaths).format("0,0")}
-          </div>
-        </div>
-      </Popup>
-    </Circle>
-  ))
+        </Popup>
+      </Circle>
+    )
+  );

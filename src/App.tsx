@@ -14,40 +14,47 @@ import { sortData, prettyProntStat } from "./util";
 import LineGraph from "./components/lineGraph/LineGraph";
 import "leaflet/dist/leaflet.css";
 
-const App =()=> {
-
+const App = () => {
   type mapcenter = {
-    lat: number
-    lng:number,
+    lat: number;
+    lng: number;
+    long: number;
+    data: {
+      countryInfo: {
+        lat: number;
+        long: number;
+      };
+    };
+  };
 
-  }
-
-  type country ={
-    country:string
-  }
+  type country = {
+    country: string;
+  };
 
   type countries = {
-    countries: any[]
-    map:Function
-  }
-  type countryinfo ={
+    countries: any[];
+    map: Function;
+  };
+  type countryinfo = {
     todayRecovered: number;
     recovered: number;
     deaths: number;
     todayDeaths: number;
     todayCases: number;
-    countryInfo: object
-    cases:any
-  }
+    countryInfo: object;
+    cases: any;
+  };
 
- 
-  
+  type mapCountries={
+    mapCountries:any
+  }
 
   const [countries, setCountries] = useState<Partial<countries>>([]);
   const [country, setCountry] = useState("Worldwide");
   const [countryInfo, setCountryInfo] = useState<Partial<countryinfo>>({});
   const [tableData, setTableData] = useState([]);
-  const [mapCenter, setMapCenter] = useState<mapcenter>({
+
+  const [mapCenter, setMapCenter] = useState<Partial<mapcenter>>({
     lat: 34.80746,
     lng: -40.4796,
   });
@@ -68,10 +75,12 @@ const App =()=> {
       await fetch("https://disease.sh/v3/covid-19/countries")
         .then((response) => response.json())
         .then((data) => {
-          const countries = data.map((country : {country:object , countryInfo:{iso2:object}}) => ({
-            name: country.country, // United States , United Knigdom , ...
-            value: country.countryInfo.iso2, // US , UK , FR , ...
-          }));
+          const countries = data.map(
+            (country: { country: object; countryInfo: { iso2: object } }) => ({
+              name: country.country, // United States , United Knigdom , ...
+              value: country.countryInfo.iso2, // US , UK , FR , ...
+            })
+          );
           const sortedData: any = sortData(data);
           setTableData(sortedData);
           setMapCountries(data);
@@ -81,7 +90,7 @@ const App =()=> {
     getCountriesData();
   }, []);
 
-  const onCountryChange = async (event: { target: { value: any; }; }) => {
+  const onCountryChange = async (event: { target: { value: any } }) => {
     const countryCode = event.target.value;
     setCountry(countryCode);
 
@@ -95,7 +104,7 @@ const App =()=> {
       .then((data) => {
         setCountry(countryCode);
         setCountryInfo(data);
-        setMapCenter([data.countryInfo.lat, data.countryInfo.long])
+        setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
         setMapZoom(4);
       });
   };
@@ -116,9 +125,14 @@ const App =()=> {
               value={country}
             >
               <MenuItem value="Worldwide">Worldwide</MenuItem>
-              {countries.map((country: { value: string | number | readonly string[] | undefined; name: React.ReactNode; }) => (
-                <MenuItem value={country.value}>{country.name}</MenuItem>
-              ))}
+              {countries.map(
+                (country: {
+                  value: string | number | readonly string[] | undefined;
+                  name: React.ReactNode;
+                }) => (
+                  <MenuItem value={country.value}>{country.name}</MenuItem>
+                )
+              )}
             </Select>
           </FormControl>
         </div>
@@ -127,16 +141,17 @@ const App =()=> {
           <InfoBoxes
             isRed
             active={casesType === "cases"}
-            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => setCasesType("cases")}
+            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+              setCasesType("cases")
+            }
             title="Coronavirus cases"
             cases={prettyProntStat(countryInfo.todayCases)}
             total={prettyProntStat(countryInfo.cases)}
           />
           <InfoBoxes
             isGreen
-            
             active={casesType === "recovered"}
-            onClick={(e:Event) => setCasesType("recovered")}
+            onClick={(e: Event) => setCasesType("recovered")}
             title="Recovered"
             cases={prettyProntStat(countryInfo.todayRecovered)}
             total={prettyProntStat(countryInfo.recovered)}
@@ -144,7 +159,9 @@ const App =()=> {
           <InfoBoxes
             isRed
             active={casesType === "deaths"}
-            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => setCasesType("deaths")}
+            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+              setCasesType("deaths")
+            }
             title="Deaths"
             cases={prettyProntStat(countryInfo.todayDeaths)}
             total={prettyProntStat(countryInfo.deaths)}
@@ -163,13 +180,12 @@ const App =()=> {
         <CardContent>
           <h3>Live Cases by Country</h3>
           <Table countries={tableData} />
-          <h3 className='app__graphTitle'>Wordwide new {casesType}</h3>
-          <LineGraph className='app__graph' casesType={casesType} />
+          <h3 className="app__graphTitle">Wordwide new {casesType}</h3>
+          <LineGraph className="app__graph" casesType={casesType} />
         </CardContent>
-      
       </Card>
     </div>
   );
-}
+};
 
 export default App;
