@@ -28,10 +28,20 @@ const App =()=> {
 
   interface countries{
     countries: object
+    map:Function
   }
   interface countryinfo{
+    todayRecovered: number;
+    recovered: number;
+    deaths: number;
+    todayDeaths: number;
+    todayCases: number;
     countryInfo: object
+    cases:any
   }
+
+ 
+  
 
   const [countries, setCountries] = useState<countries>([]);
   const [country, setCountry] = useState <country> ("Worldwide");
@@ -58,7 +68,7 @@ const App =()=> {
       await fetch("https://disease.sh/v3/covid-19/countries")
         .then((response) => response.json())
         .then((data) => {
-          const countries = data.map((country) => ({
+          const countries = data.map((country : {country:object}) => ({
             name: country.country, // United States , United Knigdom , ...
             value: country.countryInfo.iso2, // US , UK , FR , ...
           }));
@@ -71,7 +81,7 @@ const App =()=> {
     getCountriesData();
   }, []);
 
-  const onCountryChange = async (event) => {
+  const onCountryChange = async (event: { target: { value: any; }; }) => {
     const countryCode = event.target.value;
     setCountry(countryCode);
 
@@ -106,7 +116,7 @@ const App =()=> {
               value={country}
             >
               <MenuItem value="Worldwide">Worldwide</MenuItem>
-              {countries.map((country) => (
+              {countries.map((country: { value: string | number | readonly string[] | undefined; name: React.ReactNode; }) => (
                 <MenuItem value={country.value}>{country.name}</MenuItem>
               ))}
             </Select>
@@ -117,7 +127,7 @@ const App =()=> {
           <InfoBoxes
             isRed
             active={casesType === "cases"}
-            onClick={(e) => setCasesType("cases")}
+            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => setCasesType("cases")}
             title="Coronavirus cases"
             cases={prettyProntStat(countryInfo.todayCases)}
             total={prettyProntStat(countryInfo.cases)}
@@ -125,7 +135,7 @@ const App =()=> {
           <InfoBoxes
             isGreen
             active={casesType === "recovered"}
-            onClick={(e) => setCasesType("recovered")}
+            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => setCasesType("recovered")}
             title="Recovered"
             cases={prettyProntStat(countryInfo.todayRecovered)}
             total={prettyProntStat(countryInfo.recovered)}
@@ -133,7 +143,7 @@ const App =()=> {
           <InfoBoxes
             isRed
             active={casesType === "deaths"}
-            onClick={(e) => setCasesType("deaths")}
+            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => setCasesType("deaths")}
             title="Deaths"
             cases={prettyProntStat(countryInfo.todayDeaths)}
             total={prettyProntStat(countryInfo.deaths)}

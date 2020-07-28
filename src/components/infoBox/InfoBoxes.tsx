@@ -4,11 +4,11 @@ import './InfoBoxes.css'
 
 type InfoBoxesProps = {
   title: string,
-  active: string,
+  active: boolean,
   isGreen: boolean,
   isRed:boolean,
-  cases: number,
-  total:number,
+  cases: string,
+  total:string,
   onClick:Function
 }
 
