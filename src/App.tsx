@@ -18,8 +18,8 @@ const App = () => {
   type mapcenter = {
     lat: number;
     lng: number;
-    long: number;
-    data: {
+    long?: number;
+    data?: {
       countryInfo: {
         lat: number;
         long: number;
@@ -31,10 +31,8 @@ const App = () => {
     country: string;
   };
 
-  type countries = {
-    countries: any[];
-    map: Function;
-  };
+  type countries = any[]
+  
   type countryinfo = {
     todayRecovered: number;
     recovered: number;
@@ -45,16 +43,14 @@ const App = () => {
     cases: any;
   };
 
-  type mapCountries={
-    mapCountries:any
-  }
+  type mapCountries= any[]
 
-  const [countries, setCountries] = useState<Partial<countries>>([]);
+  const [countries, setCountries] = useState<countries>([]);
   const [country, setCountry] = useState("Worldwide");
   const [countryInfo, setCountryInfo] = useState<Partial<countryinfo>>({});
   const [tableData, setTableData] = useState([]);
 
-  const [mapCenter, setMapCenter] = useState<Partial<mapcenter>>({
+  const [mapCenter, setMapCenter] = useState<mapcenter>({
     lat: 34.80746,
     lng: -40.4796,
   });
@@ -104,7 +100,7 @@ const App = () => {
       .then((data) => {
         setCountry(countryCode);
         setCountryInfo(data);
-        setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+        setMapCenter((prevState)=>({...prevState,lat: data.countryInfo.lat, long:data.countryInfo.long}));
         setMapZoom(4);
       });
   };
@@ -125,7 +121,7 @@ const App = () => {
               value={country}
             >
               <MenuItem value="Worldwide">Worldwide</MenuItem>
-              {countries.map(
+              {countries?.map(
                 (country: {
                   value: string | number | readonly string[] | undefined;
                   name: React.ReactNode;
@@ -141,7 +137,7 @@ const App = () => {
           <InfoBoxes
             isRed
             active={casesType === "cases"}
-            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+            onClick={() =>
               setCasesType("cases")
             }
             title="Coronavirus cases"
@@ -149,9 +145,8 @@ const App = () => {
             total={prettyProntStat(countryInfo.cases)}
           />
           <InfoBoxes
-            isGreen
             active={casesType === "recovered"}
-            onClick={(e: Event) => setCasesType("recovered")}
+            onClick={() => setCasesType("recovered")}
             title="Recovered"
             cases={prettyProntStat(countryInfo.todayRecovered)}
             total={prettyProntStat(countryInfo.recovered)}
@@ -159,7 +154,7 @@ const App = () => {
           <InfoBoxes
             isRed
             active={casesType === "deaths"}
-            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+            onClick={() =>
               setCasesType("deaths")
             }
             title="Deaths"
@@ -171,7 +166,7 @@ const App = () => {
         <Map
           casesType={casesType}
           countries={mapCountries}
-          center={mapCenter}
+          center={[mapCenter.lat,mapCenter.lng]}
           zoom={mapZoom}
         />
       </div>

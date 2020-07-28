@@ -65,9 +65,7 @@ const buildChartData = (data: { [x: string]: { [x: string]: any; }; cases: any[]
   return chartData;
 };
 
-type Data = {
-  data: any[]
-}
+type Data = any[]
 
 type chartData = {
   x: string,
@@ -75,7 +73,7 @@ type chartData = {
 }
 
 const LineGraph = ({casesType='cases', ...props}) => {
-  const [data, setData] = useState<Partial<Data>>({});
+  const [data, setData] = useState<Data>([]);
 
   // https://disease.sh/v3/covid-19/historical/all?lastdays=120
 
@@ -94,7 +92,7 @@ const LineGraph = ({casesType='cases', ...props}) => {
 
   return (
     <div className={props.className}>
-      {data?.length > 0 && (
+      {data.length > 0 && (
         <Line
           data={{
             datasets: [

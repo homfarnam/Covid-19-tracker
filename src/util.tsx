@@ -26,20 +26,14 @@ export const sortData = (data: any) => {
 export const prettyProntStat = (stat: any) =>
   stat ? `+${numeral(stat).format("0.0a")}` : "+0";
 
+type CaseTypes = 'cases' | 'recovered' | 'deaths'
+
 type showDataOnMap = {
-  casesType: string;
+  casesType: CaseTypes;
 };
 
 type casesColors = {
-  cases: {
-    hex: string;
-    multiplier: number;
-  };
-  recovered: {
-    hex: string;
-    multiplier: number;
-  };
-  deaths: {
+  [key in CaseTypes]: {
     hex: string;
     multiplier: number;
   };
@@ -49,10 +43,11 @@ type casesColors = {
 export const showDataOnMap = (data: any, casesType = "cases"): showDataOnMap =>
   data.map(
     (country: {
-      country: { countryInfo:{ lat: number; long: number; flag: string } };
       cases: number;
       recovered: number;
       deaths: number;
+      country: string;
+      countryInfo: { lat: number; long: number; flag: string };
     }) => (
       <Circle
         center={[country.countryInfo.lat, country.countryInfo.long]}

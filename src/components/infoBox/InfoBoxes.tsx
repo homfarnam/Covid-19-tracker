@@ -5,16 +5,15 @@ import './InfoBoxes.css'
 type InfoBoxesProps = {
   title: string,
   active: boolean,
-  isGreen: boolean,
-  isRed:boolean,
+  isRed?:boolean,
   cases: string,
   total:string,
-  onClick:Function
-}
+  onClick:() => void
+} 
 
-const InfoBoxes = ({ title, cases, isRed,isGreen,total,active,...props}:InfoBoxesProps) => {
+const InfoBoxes = ({ title, cases, isRed,total,active,...props}:InfoBoxesProps) => {
   return (
-    <Card onClick={props.onClick} className={`infoBox ${active && 'infoBox--selected'} ${isRed && 'infoBox--red'} ${isGreen && 'infoBox--green'}`}>
+    <Card onClick={props.onClick} className={`infoBox ${active && 'infoBox--selected'} ${isRed && 'infoBox--red'}`}>
       <CardContent>
         <Typography className='infoBoxes__title' color="textSecondary">{title}</Typography>
 
