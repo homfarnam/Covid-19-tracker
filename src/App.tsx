@@ -16,6 +16,7 @@ import "leaflet/dist/leaflet.css";
 import Footer from './components/footer/Footer'
 
 const App = () => {
+  
   type mapcenter = {
     lat: number;
     lng: number;
@@ -101,13 +102,14 @@ const App = () => {
       .then((data) => {
         setCountry(countryCode);
         setCountryInfo(data);
-        setMapCenter((prevState)=>({...prevState,lat: data.countryInfo.lat, long:data.countryInfo.long}));
-        setMapZoom(4);
+        setMapCenter((prevState)=>({...prevState,lat: data.countryInfo.lat, lng:data.countryInfo.long}));
+        setMapZoom(3);
       });
   };
 
-  console.log("country info:", countryInfo);
+  // console.log("country info:", countryInfo);
   console.log(tableData);
+  console.log(mapCenter)
 
   return (
     <div className="app">
