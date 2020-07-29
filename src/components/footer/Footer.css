@@ -1,0 +1,29 @@
+.footer {
+    display: flex !important;
+    justify-content: center;
+    flex-direction: column;
+    top: 20px;
+    position: relative;
+}
+
+.footer__main {
+    font-family: 'Ubuntu', sans-serif !important;
+    font-weight: 500;
+    margin: 0 auto;
+}
+
+.footer__main a {
+    text-decoration: none;
+    color: #4834d4;
+}
+
+.footer__git {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    margin: 0 auto;
+}
+
+.footer__git a {
+    text-decoration: none;
+    color: tomato;
+}

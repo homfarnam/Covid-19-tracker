@@ -13,6 +13,7 @@ import Table from "./components/table/Table";
 import { sortData, prettyProntStat } from "./util";
 import LineGraph from "./components/lineGraph/LineGraph";
 import "leaflet/dist/leaflet.css";
+import Footer from './components/footer/Footer'
 
 const App = () => {
   type mapcenter = {
@@ -179,6 +180,12 @@ const App = () => {
           <LineGraph className="app__graph" casesType={casesType} />
         </CardContent>
       </Card>
+
+      <div className='footer__section'>
+    
+        <Footer />
+    
+      </div>
     </div>
   );
 };
