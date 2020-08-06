@@ -6,13 +6,11 @@ import {
   Card,
   CardContent,
 } from '@material-ui/core'
-import './App.css'
 import InfoBoxes from './components/infoBox/InfoBoxes'
 import Map from './components/map/Map'
 import Table from './components/table/Table'
 import { sortData, prettyProntStat } from './components/map/marker/Util'
 import LineGraph from './components/lineGraph/LineGraph'
-import 'leaflet/dist/leaflet.css'
 import Footer from './components/footer/Footer'
 import {
   CountryCode,
@@ -21,6 +19,8 @@ import {
   CaseTypes,
   CountryCasesInfo,
 } from './@types/types'
+import './App.css'
+import 'leaflet/dist/leaflet.css'
 
 interface AppProps {}
 
@@ -30,17 +30,25 @@ interface GeneralInfoState {
   countryCodes: CountryCode[]
 }
 
+interface MapInfoState {
+  country: string
+  mapCenter: Mapcenter
+  mapZoom: number
+  casesType: CaseTypes
+}
+
 const App: React.FC<AppProps> = () => {
   const [diseaseInfo, setDiseaseInfo] = useState<Partial<DiseaseInfo>>({})
   const [generalInfo, setGeneralInfo] = useState<GeneralInfoState>()
-
-  const [country, setCountry] = useState('Worldwide')
-  const [mapCenter, setMapCenter] = useState<Mapcenter>({
-    lat: 34.80746,
-    lng: -40.4796,
+  const [mapInfo, setMapInfo] = useState<MapInfoState>({
+    country: 'Worldwide',
+    mapCenter: {
+      lat: 34.80746,
+      lng: -40.4796,
+    },
+    mapZoom: 3,
+    casesType: 'cases',
   })
-  const [mapZoom, setMapZoom] = useState(3)
-  const [casesType, setCasesType] = useState('cases')
 
   useEffect(() => {
     fetch('https://disease.sh/v3/covid-19/all')
@@ -76,8 +84,8 @@ const App: React.FC<AppProps> = () => {
   }, [])
 
   const onCountryChange = async (event: { target: { value: any } }) => {
-    const countryCode = event.target.value
-    setCountry(countryCode)
+    const countryCode = event.target.value as string
+    setMapInfo((prev) => ({ ...prev, countryCode }))
 
     const url =
       countryCode === 'worldwide'
@@ -87,16 +95,25 @@ const App: React.FC<AppProps> = () => {
     await fetch(url)
       .then((res) => res.json())
       .then((data) => {
-        setCountry(countryCode)
         setDiseaseInfo(data)
-        setMapCenter((prevState) => ({
-          ...prevState,
-          lat: data.countryInfo.lat,
-          lng: data.countryInfo.long,
-        }))
-        setMapZoom(3)
+
+        const mapCenter =
+          countryCode === 'worldwide'
+            ? { lat: 34.80746, lng: -40.4796 }
+            : { lat: data.countryInfo.lat, lng: data.countryInfo.long }
+
+        setMapInfo({
+          country: countryCode,
+          mapCenter,
+          mapZoom: 3,
+          casesType: 'cases',
+        })
       })
       .catch((err) => console.log(err))
+  }
+
+  const changeCaseType = (casesType: CaseTypes) => {
+    setMapInfo((prev) => ({ ...prev, casesType }))
   }
 
   return (
@@ -109,7 +126,7 @@ const App: React.FC<AppProps> = () => {
             <Select
               onChange={onCountryChange}
               variant="outlined"
-              value={country}
+              value={mapInfo.country}
             >
               <MenuItem value="Worldwide">Worldwide</MenuItem>
               {generalInfo?.countryCodes.map((countryCode) => (
@@ -124,23 +141,23 @@ const App: React.FC<AppProps> = () => {
         <div className="app__stats">
           <InfoBoxes
             isRed
-            active={casesType === 'cases'}
-            onClick={() => setCasesType('cases')}
+            active={mapInfo.casesType === 'cases'}
+            onClick={() => changeCaseType('cases')}
             title="Coronavirus cases"
             cases={prettyProntStat(diseaseInfo.todayCases)}
             total={prettyProntStat(diseaseInfo.cases)}
           />
           <InfoBoxes
-            active={casesType === 'recovered'}
-            onClick={() => setCasesType('recovered')}
+            active={mapInfo.casesType === 'recovered'}
+            onClick={() => changeCaseType('recovered')}
             title="Recovered"
             cases={prettyProntStat(diseaseInfo.todayRecovered)}
             total={prettyProntStat(diseaseInfo.recovered)}
           />
           <InfoBoxes
             isRed
-            active={casesType === 'deaths'}
-            onClick={() => setCasesType('deaths')}
+            active={mapInfo.casesType === 'deaths'}
+            onClick={() => changeCaseType('deaths')}
             title="Deaths"
             cases={prettyProntStat(diseaseInfo.todayDeaths)}
             total={prettyProntStat(diseaseInfo.deaths)}
@@ -148,10 +165,10 @@ const App: React.FC<AppProps> = () => {
         </div>
 
         <Map
-          casesType={casesType as CaseTypes}
+          casesType={mapInfo.casesType}
           diseaseData={generalInfo?.diseaseData}
-          center={[mapCenter.lat, mapCenter.lng]}
-          zoom={mapZoom}
+          center={[mapInfo.mapCenter.lat, mapInfo.mapCenter.lng]}
+          zoom={mapInfo.mapZoom}
         />
       </div>
 
@@ -159,8 +176,8 @@ const App: React.FC<AppProps> = () => {
         <CardContent>
           <h3>Live Cases by Country</h3>
           <Table countriesData={generalInfo?.countriesCases} />
-          <h3 className="app__graphTitle">Wordwide new {casesType}</h3>
-          <LineGraph className="app__graph" casesType={casesType} />
+          <h3 className="app__graphTitle">Wordwide new {mapInfo.casesType}</h3>
+          <LineGraph className="app__graph" casesType={mapInfo.casesType} />
         </CardContent>
       </Card>
 
