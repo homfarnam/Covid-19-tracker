@@ -19,10 +19,12 @@
     "noEmit": true,
     "jsx": "react",
     "suppressImplicitAnyIndexErrors": true,
-
+    "typeRoots": [
+      "node_modules/@types",
+      "src/@types"
+    ],
   },
   "include": [
     "src"
-  ]
-  
+  ],
 }

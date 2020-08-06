@@ -1,115 +1,103 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react'
 import {
   FormControl,
   Select,
   MenuItem,
   Card,
   CardContent,
-} from "@material-ui/core";
-import "./App.css";
-import InfoBoxes from "./components/infoBox/InfoBoxes";
-import Map from "./components/map/Map";
-import Table from "./components/table/Table";
-import { sortData, prettyProntStat } from "./util";
-import LineGraph from "./components/lineGraph/LineGraph";
-import "leaflet/dist/leaflet.css";
+} from '@material-ui/core'
+import './App.css'
+import InfoBoxes from './components/infoBox/InfoBoxes'
+import Map from './components/map/Map'
+import Table from './components/table/Table'
+import { sortData, prettyProntStat } from './components/map/marker/Util'
+import LineGraph from './components/lineGraph/LineGraph'
+import 'leaflet/dist/leaflet.css'
 import Footer from './components/footer/Footer'
+import {
+  CountryCode,
+  Mapcenter,
+  DiseaseInfo,
+  CaseTypes,
+  CountryCasesInfo,
+} from './@types/types'
 
-const App = () => {
-  
-  type mapcenter = {
-    lat: number;
-    lng: number;
-    long?: number;
-    data?: {
-      countryInfo: {
-        lat: number;
-        long: number;
-      };
-    };
-  };
+interface AppProps {}
 
-  type country = {
-    country: string;
-  };
+interface GeneralInfoState {
+  countriesCases: CountryCasesInfo[]
+  diseaseData: DiseaseInfo[]
+  countryCodes: CountryCode[]
+}
 
-  type countries = any[]
-  
-  type countryinfo = {
-    todayRecovered: number;
-    recovered: number;
-    deaths: number;
-    todayDeaths: number;
-    todayCases: number;
-    countryInfo: object;
-    cases: any;
-  };
+const App: React.FC<AppProps> = () => {
+  const [diseaseInfo, setDiseaseInfo] = useState<Partial<DiseaseInfo>>({})
+  const [generalInfo, setGeneralInfo] = useState<GeneralInfoState>()
 
-  type mapCountries= any[]
-
-  const [countries, setCountries] = useState<countries>([]);
-  const [country, setCountry] = useState("Worldwide");
-  const [countryInfo, setCountryInfo] = useState<Partial<countryinfo>>({});
-  const [tableData, setTableData] = useState([]);
-
-  const [mapCenter, setMapCenter] = useState<mapcenter>({
+  const [country, setCountry] = useState('Worldwide')
+  const [mapCenter, setMapCenter] = useState<Mapcenter>({
     lat: 34.80746,
     lng: -40.4796,
-  });
-  const [mapZoom, setMapZoom] = useState(3);
-  const [mapCountries, setMapCountries] = useState([]);
-  const [casesType, setCasesType] = useState("cases");
+  })
+  const [mapZoom, setMapZoom] = useState(3)
+  const [casesType, setCasesType] = useState('cases')
 
   useEffect(() => {
-    fetch("https://disease.sh/v3/covid-19/all")
+    fetch('https://disease.sh/v3/covid-19/all')
       .then((res) => res.json())
       .then((data) => {
-        setCountryInfo(data);
-      });
-  }, []);
+        setDiseaseInfo(data)
+      })
+      .catch((err) => console.log(err))
+  }, [])
 
   useEffect(() => {
     const getCountriesData = async () => {
-      await fetch("https://disease.sh/v3/covid-19/countries")
+      await fetch('https://disease.sh/v3/covid-19/countries')
         .then((response) => response.json())
-        .then((data) => {
-          const countries = data.map(
-            (country: { country: object; countryInfo: { iso2: object } }) => ({
+        .then((diseaseData) => {
+          const countryCodes = diseaseData.map(
+            (country: { country: string; countryInfo: { iso2: string } }) => ({
               name: country.country, // United States , United Knigdom , ...
               value: country.countryInfo.iso2, // US , UK , FR , ...
-            })
-          );
-          const sortedData: any = sortData(data);
-          setTableData(sortedData);
-          setMapCountries(data);
-          setCountries(countries);
-        });
-    };
-    getCountriesData();
-  }, []);
+            }),
+          )
+          const countriesCases = sortData(diseaseData)
+
+          setGeneralInfo({
+            countriesCases,
+            countryCodes,
+            diseaseData,
+          })
+        })
+        .catch((err) => console.log(err))
+    }
+    getCountriesData()
+  }, [])
 
   const onCountryChange = async (event: { target: { value: any } }) => {
-    const countryCode = event.target.value;
-    setCountry(countryCode);
+    const countryCode = event.target.value
+    setCountry(countryCode)
 
     const url =
-      countryCode === "worldwide"
-        ? "https://disease.sh/v3/covid-19/all"
-        : `https://disease.sh/v3/covid-19/countries/${countryCode}`;
+      countryCode === 'worldwide'
+        ? 'https://disease.sh/v3/covid-19/all'
+        : `https://disease.sh/v3/covid-19/countries/${countryCode}`
 
     await fetch(url)
       .then((res) => res.json())
       .then((data) => {
-        setCountry(countryCode);
-        setCountryInfo(data);
-        setMapCenter((prevState)=>({...prevState,lat: data.countryInfo.lat, lng:data.countryInfo.long}));
-        setMapZoom(3);
-      });
-  };
-
-  // console.log("country info:", countryInfo);
-  console.log(tableData);
-  console.log(mapCenter)
+        setCountry(countryCode)
+        setDiseaseInfo(data)
+        setMapCenter((prevState) => ({
+          ...prevState,
+          lat: data.countryInfo.lat,
+          lng: data.countryInfo.long,
+        }))
+        setMapZoom(3)
+      })
+      .catch((err) => console.log(err))
+  }
 
   return (
     <div className="app">
@@ -124,14 +112,11 @@ const App = () => {
               value={country}
             >
               <MenuItem value="Worldwide">Worldwide</MenuItem>
-              {countries?.map(
-                (country: {
-                  value: string | number | readonly string[] | undefined;
-                  name: React.ReactNode;
-                }) => (
-                  <MenuItem value={country.value}>{country.name}</MenuItem>
-                )
-              )}
+              {generalInfo?.countryCodes.map((countryCode) => (
+                <MenuItem value={countryCode.value}>
+                  {countryCode.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </div>
@@ -139,37 +124,33 @@ const App = () => {
         <div className="app__stats">
           <InfoBoxes
             isRed
-            active={casesType === "cases"}
-            onClick={() =>
-              setCasesType("cases")
-            }
+            active={casesType === 'cases'}
+            onClick={() => setCasesType('cases')}
             title="Coronavirus cases"
-            cases={prettyProntStat(countryInfo.todayCases)}
-            total={prettyProntStat(countryInfo.cases)}
+            cases={prettyProntStat(diseaseInfo.todayCases)}
+            total={prettyProntStat(diseaseInfo.cases)}
           />
           <InfoBoxes
-            active={casesType === "recovered"}
-            onClick={() => setCasesType("recovered")}
+            active={casesType === 'recovered'}
+            onClick={() => setCasesType('recovered')}
             title="Recovered"
-            cases={prettyProntStat(countryInfo.todayRecovered)}
-            total={prettyProntStat(countryInfo.recovered)}
+            cases={prettyProntStat(diseaseInfo.todayRecovered)}
+            total={prettyProntStat(diseaseInfo.recovered)}
           />
           <InfoBoxes
             isRed
-            active={casesType === "deaths"}
-            onClick={() =>
-              setCasesType("deaths")
-            }
+            active={casesType === 'deaths'}
+            onClick={() => setCasesType('deaths')}
             title="Deaths"
-            cases={prettyProntStat(countryInfo.todayDeaths)}
-            total={prettyProntStat(countryInfo.deaths)}
+            cases={prettyProntStat(diseaseInfo.todayDeaths)}
+            total={prettyProntStat(diseaseInfo.deaths)}
           />
         </div>
 
         <Map
-          casesType={casesType}
-          countries={mapCountries}
-          center={[mapCenter.lat,mapCenter.lng]}
+          casesType={casesType as CaseTypes}
+          diseaseData={generalInfo?.diseaseData}
+          center={[mapCenter.lat, mapCenter.lng]}
           zoom={mapZoom}
         />
       </div>
@@ -177,19 +158,17 @@ const App = () => {
       <Card className="app__right">
         <CardContent>
           <h3>Live Cases by Country</h3>
-          <Table countries={tableData} />
+          <Table countriesData={generalInfo?.countriesCases} />
           <h3 className="app__graphTitle">Wordwide new {casesType}</h3>
           <LineGraph className="app__graph" casesType={casesType} />
         </CardContent>
       </Card>
 
-      <div className='footer__section'>
-    
+      <div className="footer__section">
         <Footer />
-    
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
