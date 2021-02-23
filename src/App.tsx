@@ -128,7 +128,7 @@ const App: React.FC<AppProps> = () => {
               variant="outlined"
               value={mapInfo.country}
             >
-              <MenuItem value="Worldwide">Worldwide</MenuItem>
+              {/* <MenuItem value="Worldwide">Worldwide</MenuItem> */}
               {generalInfo?.countryCodes.map((countryCode) => (
                 <MenuItem value={countryCode.value}>
                   {countryCode.name}
