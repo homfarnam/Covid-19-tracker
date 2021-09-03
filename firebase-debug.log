@@ -1,0 +1,60 @@
+[debug] [2021-02-23T08:03:48.483Z] ----------------------------------------------------------------------
+[debug] [2021-02-23T08:03:48.485Z] Command:       /Users/farnam/.nvm/versions/node/v12.20.1/bin/node /usr/local/bin/firebase open
+[debug] [2021-02-23T08:03:48.485Z] CLI Version:   8.12.0
+[debug] [2021-02-23T08:03:48.485Z] Platform:      darwin
+[debug] [2021-02-23T08:03:48.485Z] Node Version:  v12.20.1
+[debug] [2021-02-23T08:03:48.486Z] Time:          Tue Feb 23 2021 11:33:48 GMT+0330 (Iran Standard Time)
+[debug] [2021-02-23T08:03:48.486Z] ----------------------------------------------------------------------
+[debug] [2021-02-23T08:03:48.486Z] 
+[debug] [2021-02-23T08:03:48.496Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-02-23T08:03:48.496Z] > authorizing via signed-in user
+[debug] [2021-02-23T08:03:48.498Z] [iam] checking project covid-19-tracker-7672c for permissions ["firebase.projects.get"]
+[debug] [2021-02-23T08:03:48.499Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/covid-19-tracker-7672c:testIamPermissions  
+ {"permissions":["firebase.projects.get"]}
+[debug] [2021-02-23T08:03:48.775Z] <<< HTTP RESPONSE 403 {"content-type":"text/html; charset=UTF-8","referrer-policy":"no-referrer","content-length":"1632","server-timing":"gfet4t7; dur=0","date":"Tue, 23 Feb 2021 08:03:48 GMT","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","connection":"close"}
+[debug] [2021-02-23T08:03:48.776Z] <<< HTTP RESPONSE BODY <!DOCTYPE html>
+<html lang=en>
+  <meta charset=utf-8>
+  <meta name=viewport content="initial-scale=1, minimum-scale=1, width=device-width">
+  <title>Error 403 (Forbidden)!!1</title>
+  <style>
+    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}html{background:#fff;color:#222;padding:15px}body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}* > body{background:url(//www.google.com/images/errors/robot.png) 100% 5px no-repeat;padding-right:205px}p{margin:11px 0 22px;overflow:hidden}ins{color:#777;text-decoration:none}a img{border:0}@media screen and (max-width:772px){body{background:none;margin-top:0;max-width:none;padding-right:0}}#logo{background:url(//www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png) no-repeat;margin-left:-5px}@media only screen and (min-resolution:192dpi){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat 0% 0%/100% 100%;-moz-border-image:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) 0}}@media only screen and (-webkit-min-device-pixel-ratio:2){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat;-webkit-background-size:100% 100%}}#logo{display:inline-block;height:54px;width:150px}
+  </style>
+  <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+  <p><b>403.</b> <ins>That’s an error.</ins>
+  <p>Your client does not have permission to get URL <code>/v1/projects/covid-19-tracker-7672c:testIamPermissions</code> from this server.  <ins>That’s all we know.</ins>
+
+[debug] [2021-02-23T08:03:48.777Z] [iam] error while checking permissions, command may fail: FirebaseError: HTTP Error: 403, Unknown Error
+[debug] [2021-02-23T08:03:48.778Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/covid-19-tracker-7672c  
+ 
+[debug] [2021-02-23T08:03:49.195Z] <<< HTTP RESPONSE 403 {"content-type":"text/html; charset=UTF-8","referrer-policy":"no-referrer","content-length":"1618","date":"Tue, 23 Feb 2021 08:03:49 GMT","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\""}
+[debug] [2021-02-23T08:03:49.195Z] <<< HTTP RESPONSE BODY <!DOCTYPE html>
+<html lang=en>
+  <meta charset=utf-8>
+  <meta name=viewport content="initial-scale=1, minimum-scale=1, width=device-width">
+  <title>Error 403 (Forbidden)!!1</title>
+  <style>
+    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}html{background:#fff;color:#222;padding:15px}body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}* > body{background:url(//www.google.com/images/errors/robot.png) 100% 5px no-repeat;padding-right:205px}p{margin:11px 0 22px;overflow:hidden}ins{color:#777;text-decoration:none}a img{border:0}@media screen and (max-width:772px){body{background:none;margin-top:0;max-width:none;padding-right:0}}#logo{background:url(//www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png) no-repeat;margin-left:-5px}@media only screen and (min-resolution:192dpi){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat 0% 0%/100% 100%;-moz-border-image:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) 0}}@media only screen and (-webkit-min-device-pixel-ratio:2){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat;-webkit-background-size:100% 100%}}#logo{display:inline-block;height:54px;width:150px}
+  </style>
+  <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+  <p><b>403.</b> <ins>That’s an error.</ins>
+  <p>Your client does not have permission to get URL <code>/v1beta1/projects/covid-19-tracker-7672c</code> from this server.  <ins>That’s all we know.</ins>
+
+[debug] [2021-02-23T08:03:49.196Z] HTTP Error: 403, Unknown Error
+[debug] [2021-02-23T08:03:49.568Z] FirebaseError: HTTP Error: 403, Unknown Error
+    at module.exports (/usr/local/lib/node_modules/firebase-tools/lib/responseToError.js:38:12)
+    at Request._callback (/usr/local/lib/node_modules/firebase-tools/lib/api.js:41:35)
+    at Request.self.callback (/usr/local/lib/node_modules/firebase-tools/node_modules/request/request.js:185:22)
+    at Request.emit (events.js:314:20)
+    at Request.EventEmitter.emit (domain.js:483:12)
+    at Request.<anonymous> (/usr/local/lib/node_modules/firebase-tools/node_modules/request/request.js:1154:10)
+    at Request.emit (events.js:314:20)
+    at Request.EventEmitter.emit (domain.js:483:12)
+    at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/firebase-tools/node_modules/request/request.js:1076:12)
+    at Object.onceWrapper (events.js:420:28)
+    at IncomingMessage.emit (events.js:326:22)
+    at IncomingMessage.EventEmitter.emit (domain.js:483:12)
+    at endReadableNT (_stream_readable.js:1241:12)
+    at processTicksAndRejections (internal/process/task_queues.js:84:21)
+[error] 
+[error] Error: Failed to get Firebase project covid-19-tracker-7672c. Please make sure the project exists and your account has permission to access it.
